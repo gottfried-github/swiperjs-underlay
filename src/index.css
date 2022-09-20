@@ -1,6 +1,10 @@
 .swiper-container {
     display: flex;
     overflow: hidden;
+
+    position: relative;
+
+    padding: 0px 120px;
 }
 
 .swiper-container > .slides-container {
@@ -9,8 +13,8 @@
 
 .slides-wrapper > .slides-container {
     display: flex;
-    // use Swiper spaceBetween instead
-    // column-gap: 88px;
+    /* // use Swiper spaceBetween instead
+    // column-gap: 88px; */
 
     margin: 0px;
     padding: 0px;
@@ -30,4 +34,38 @@
 
 .transparent {
     opacity: 0;
+}
+
+.button-prev-container, .button-next-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    position: absolute;
+    /* position: relative; */
+    height: 100%;
+    width: 130px;
+
+    z-index: 10;
+}
+
+.button-prev-container {
+    left: 0px;
+    /* margin-right: -120px; */
+}
+.button-next-container {
+    right: 0px;
+    /* margin-left: -120px; */
+}
+
+.button {
+    width: 44px;
+    height: 44px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    background-color: rgba(0, 0, 0, 0.5);
 }
