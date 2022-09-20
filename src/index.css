@@ -1,0 +1,33 @@
+.swiper-container {
+    display: flex;
+    overflow: hidden;
+}
+
+.swiper-container > .slides-container {
+    width: 100%;
+}
+
+.slides-wrapper > .slides-container {
+    display: flex;
+    // use Swiper spaceBetween instead
+    // column-gap: 88px;
+
+    margin: 0px;
+    padding: 0px;
+
+    list-style-type: none;
+}
+
+.slides-container > .slide {
+    width: 270px;
+    height: 270px;
+
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    trasition: opacity 0.3s;
+}
+
+.transparent {
+    opacity: 0;
+}
