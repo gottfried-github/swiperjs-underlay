@@ -1,0 +1,19 @@
+{
+  "name": "slides-fadeout",
+  "version": "0.0.1",
+  "description": "I have a joke description",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gottfried",
+  "license": "MIT",
+  "dependencies": {
+    "swiper": "^8.4.2"
+  },
+  "devDependencies": {
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}

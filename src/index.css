@@ -12,7 +12,7 @@ html, body {
     padding: 0px 120px;
 }
 
-.swiper-container > .slides-container {
+.swiper-container > .slides-wrapper {
     width: 100%;
 }
 
@@ -28,6 +28,8 @@ html, body {
 }
 
 .slides-container > .slide {
+    flex-shrink: 0;
+
     width: 270px;
     height: 270px;
 
