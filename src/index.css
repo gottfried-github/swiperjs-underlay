@@ -76,3 +76,9 @@ html, body {
 
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+@media (max-width: 850px) {
+    .button-prev-container, .button-next-container {
+        width: 60px;
+    }
+}
