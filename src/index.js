@@ -2,9 +2,17 @@ import {Swiper, Pagination, Navigation, FreeMode} from 'swiper'
 
 class Main {
     constructor() {
-        this.initSlider()
+        this.transparentClass = 'transparent'
+
+        this.slides = document.querySelectorAll('.slides-container')
         this.btnPrev = document.querySelector('.brief-list-container .button-prev-container .button'),
         this.btnNext = document.querySelector('.brief-list-container .button-next-container .button')
+
+        this.pointLeft = null
+        this.pointRight = null
+
+        this.slideLeft = null
+        this.slideRight = null
 
         const swiper = new Swiper(document.querySelector('.slides-wrapper'), {
             modules: [Navigation, FreeMode], // FreeMode
@@ -22,8 +30,33 @@ class Main {
             // spaceBetween: 120,
             navigation: { prevEl: this.btnPrev, nextEl: this.btnNext}
         });
-        
+
         console.log(swiper);
+
+        swiper.on('setTranslate', this.handleSliding.bind(this))
+        swiper.on('setTransition', (swiper, dur) => {
+            if (0 === dur) return
+
+            requestAnimationFrame(this.makeRaFCb(null, dur, this.handleSliding.bind(this), this.makeRaFCb))
+        })
+
+        window.addEventListener('resize', () => {
+            // TODO: before setSliderState, make sure that swiper translation/transition isn't running
+            this.setSliderState(20)
+        })
+    }
+
+    makeRaFCb(timeInitial, dur, cb, makeRaFCb) {
+        return (time) => {
+            if (null === timeInitial) timeInitial = time
+            if (dur < time - timeInitial) {
+                // console.log('rAfCb, more time has passed than the given duration - dur, time - timeInitial:', dur, time - timeInitial);
+                return
+            }
+
+            cb()
+            requestAnimationFrame(makeRaFCb(timeInitial, dur, cb, makeRaFCb))
+        }
     }
 
     setSliderState(offset) {
@@ -32,7 +65,7 @@ class Main {
         this.setSlidesState()
     }
 
-    handleSliding(swiper, translate) {
+    handleSliding() { // swiper, translate
         // console.log('initBriefList, swiper setTranslate cb, translate:', translate);
         if (this.isBehindLeft(this.leftPoint, this.leftSlide.querySelector(`.${briefClass}`))) {
             // console.log('initBriefList, swiper setTranslate cb, leftSlide is behind, leftSlide:', leftSlide);
