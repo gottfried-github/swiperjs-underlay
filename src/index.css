@@ -40,7 +40,7 @@ html, body {
 }
 
 .transparent {
-    opacity: 0;
+    opacity: 0.2;
 }
 
 .button-prev-container, .button-next-container {

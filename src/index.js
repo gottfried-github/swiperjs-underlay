@@ -4,9 +4,9 @@ class Main {
     constructor() {
         this.transparentClass = 'transparent'
 
-        this.slides = document.querySelectorAll('.slides-container')
-        this.btnPrev = document.querySelector('.brief-list-container .button-prev-container .button'),
-        this.btnNext = document.querySelector('.brief-list-container .button-next-container .button')
+        this.slides = document.querySelectorAll('.slides-container .slide')
+        this.btnPrev = document.querySelector('.swiper-container .button-prev-container .button')
+        this.btnNext = document.querySelector('.swiper-container .button-next-container .button')
 
         this.pointLeft = null
         this.pointRight = null
@@ -14,6 +14,16 @@ class Main {
         this.slideLeft = null
         this.slideRight = null
 
+        this.setSliderState(20)
+        window.addEventListener('resize', () => {
+            // TODO: before setSliderState, make sure that swiper translation/transition isn't running
+            this.setSliderState(20)
+        })
+
+        this.initSwiper()
+    }
+
+    initSwiper() {
         const swiper = new Swiper(document.querySelector('.slides-wrapper'), {
             modules: [Navigation, FreeMode], // FreeMode
             slidesPerView: 'auto',
@@ -31,22 +41,17 @@ class Main {
             navigation: { prevEl: this.btnPrev, nextEl: this.btnNext}
         });
 
-        console.log(swiper);
-
-        swiper.on('setTranslate', this.handleSliding.bind(this))
+        swiper.on('setTranslate', this._handleSliding.bind(this))
         swiper.on('setTransition', (swiper, dur) => {
             if (0 === dur) return
 
-            requestAnimationFrame(this.makeRaFCb(null, dur, this.handleSliding.bind(this), this.makeRaFCb))
+            requestAnimationFrame(this._makeRaFCb(null, dur, this._handleSliding.bind(this), this._makeRaFCb.bind(this)))
         })
 
-        window.addEventListener('resize', () => {
-            // TODO: before setSliderState, make sure that swiper translation/transition isn't running
-            this.setSliderState(20)
-        })
+        console.log(swiper);
     }
 
-    makeRaFCb(timeInitial, dur, cb, makeRaFCb) {
+    _makeRaFCb(timeInitial, dur, cb, makeRaFCb) {
         return (time) => {
             if (null === timeInitial) timeInitial = time
             if (dur < time - timeInitial) {
@@ -61,55 +66,73 @@ class Main {
 
     setSliderState(offset) {
         this.setPoints(offset)
-        this.setInitialSlides()
-        this.setSlidesState()
+        this._setInitialSlides()
+        this._setSlidesState()
     }
 
-    handleSliding() { // swiper, translate
+    _handleSliding() {
         // console.log('initBriefList, swiper setTranslate cb, translate:', translate);
-        if (this.isBehindLeft(this.leftPoint, this.leftSlide.querySelector(`.${briefClass}`))) {
+        if (this._isBehindLeft(this.pointLeft, this.slideLeft)) {
             // console.log('initBriefList, swiper setTranslate cb, leftSlide is behind, leftSlide:', leftSlide);
-            if (!this.leftSlide.classList.contains(transparentClass)) this.leftSlide.classList.add(transparentClass)
-            if (this.leftSlide.nextElementSibling && this.isBehindLeft(this.leftPoint, this.leftSlide.nextElementSibling.querySelector(`.${briefClass}`))) this.leftSlide = this.leftSlide.nextElementSibling
+            if (!this.slideLeft.classList.contains(this.transparentClass)) this.slideLeft.classList.add(this.transparentClass)
+            if (this.slideLeft.nextElementSibling && this._isBehindLeft(this.pointLeft, this.slideLeft.nextElementSibling)) this.slideLeft = this.slideLeft.nextElementSibling
         } else {
             // console.log('initBriefList, swiper setTranslate cb, leftSlide isnt behind, leftSlide:', leftSlide);
-            if (this.leftSlide.classList.contains(transparentClass)) this.leftSlide.classList.remove(transparentClass)
-            this.leftSlide = this.leftSlide.previousElementSibling || this.leftSlide
+            if (this.slideLeft.classList.contains(this.transparentClass)) this.slideLeft.classList.remove(this.transparentClass)
+            this.slideLeft = this.slideLeft.previousElementSibling || this.slideLeft
         }
 
-        if (this.isBehindRight(this.rightPoint, this.rightSlide.querySelector(`.${briefClass}`))) {
+        if (this._isBehindRight(this.pointRight, this.slideRight)) {
             // console.log('initBriefList, swiper setTranslate cb, rightSlide is behind, rightSlide:', rightSlide);
-            if (!this.rightSlide.classList.contains(transparentClass)) this.rightSlide.classList.add(transparentClass)
-            if (this.rightSlide.previousElementSibling && this.isBehindRight(this.rightPoint, this.rightSlide.previousElementSibling.querySelector(`.${briefClass}`))) this.rightSlide = this.rightSlide.previousElementSibling
+            if (!this.slideRight.classList.contains(this.transparentClass)) this.slideRight.classList.add(this.transparentClass)
+            if (this.slideRight.previousElementSibling && this._isBehindRight(this.pointRight, this.slideRight.previousElementSibling)) this.slideRight = this.slideRight.previousElementSibling
         } else {
-            // console.log('initBriefList, swiper setTranslate cb, rightSlide isnt behind, rightSlide:', rightSlide);
-            if (this.rightSlide.classList.contains(transparentClass)) this.rightSlide.classList.remove(transparentClass)
-            this.rightSlide = this.rightSlide.nextElementSibling || this.rightSlide
+            // console.log('initBriefList, swiper setTranslate cb, slideRight isnt behind, slideRight:', slideRight);
+            if (this.slideRight.classList.contains(this.transparentClass)) this.slideRight.classList.remove(this.transparentClass)
+            this.slideRight = this.slideRight.nextElementSibling || this.slideRight
         }
     }
 
-    setSlidesState() {
-        for (const slide of slides) {
-            if (this.isBehindLeft(leftPoint, slide.querySelector(`.${briefClass}`))) {
-                // if (null === leftSlide) leftSlide = slide
-                slide.classList.add('transparent')
-            } else if (this.isBehindRight(rightPoint, slide.querySelector(`.${briefClass}`))) {
-                // if (null === rightSlide) rightSlide = slide
-                slide.classList.add('transparent')
+    // private, because depends on pointLeft/pointRight being set
+    _setSlidesState() {
+        for (const slide of this.slides) {
+            if (this._isBehindLeft(this.pointLeft, slide)) {
+                slide.classList.add(this.transparentClass)
+            } else if (this._isBehindRight(this.pointRight, slide)) {
+                slide.classList.add(this.transparentClass)
             } else {
-                slide.classList.remove('transparent')
+                slide.classList.remove(this.transparentClass)
             }
         }
     }
 
-    setInitialSlides() {
-        this.slideLeft = this.getClosest(this.pointLeft, slides, true)
-        this.slideRight = this.getClosest(this.pointRight, slides)
+    // private, because depends on pointLeft/pointRight being set
+    _setInitialSlides() {
+        this.slideLeft = this._getClosest(this.pointLeft, this.slides, true)
+        this.slideRight = this._getClosest(this.pointRight, this.slides)
     }
 
     setPoints(offset) {
         this.pointLeft = this.btnPrev.getBoundingClientRect().right - offset
         this.pointRight = this.btnNext.getBoundingClientRect().left + offset
+    }
+
+    _getClosest(point, slides, left) {
+        let [prevD, prevEl] = [null, null]
+
+        for (const slide of slides) {
+            const d = Math.abs(point - left ? slide.getBoundingClientRect().left : slide.getBoundingClientRect().right)
+            if (null === prevD || d < prevD) { prevD = d; prevEl = slide; continue }
+            return prevEl
+        }
+    }
+
+    _isBehindLeft(point, el) {
+        return el.getBoundingClientRect().left < point
+    }
+
+    _isBehindRight(point, el) {
+        return el.getBoundingClientRect().right > point
     }
 }
 
