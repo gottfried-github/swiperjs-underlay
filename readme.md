@@ -1,4 +1,7 @@
 # Swiperjs-underlay
+## Demo
+See [demo](https://gottfried-github.github.io/swiperjs-underlay/dist/index.html)
+
 ## Description
 Make slides transparent when they intersect with buttons. For use with [Swiper.js](https://swiperjs.com/)
 
