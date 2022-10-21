@@ -25,9 +25,8 @@ class Main {
 
     initSwiper() {
         const swiper = new Swiper(document.querySelector('.slides-wrapper'), {
-            modules: [Navigation, FreeMode], // FreeMode
+            modules: [Navigation, FreeMode],
             slidesPerView: 'auto',
-            // freeMode: true,
             freeMode: {
                 enabled: true,
                 sticky: false,
@@ -37,7 +36,6 @@ class Main {
                 momentumVelocityRatio: 1,
                 minimumVelocity: 0.02
             },
-            // spaceBetween: 120,
             navigation: { prevEl: this.btnPrev, nextEl: this.btnNext}
         });
 
@@ -71,23 +69,18 @@ class Main {
     }
 
     _handleSliding() {
-        // console.log('initBriefList, swiper setTranslate cb, translate:', translate);
         if (this._isBehindLeft(this.pointLeft, this.slideLeft)) {
-            // console.log('initBriefList, swiper setTranslate cb, leftSlide is behind, leftSlide:', leftSlide);
             if (!this.slideLeft.classList.contains(this.transparentClass)) this.slideLeft.classList.add(this.transparentClass)
             if (this.slideLeft.nextElementSibling && this._isBehindLeft(this.pointLeft, this.slideLeft.nextElementSibling)) this.slideLeft = this.slideLeft.nextElementSibling
         } else {
-            // console.log('initBriefList, swiper setTranslate cb, leftSlide isnt behind, leftSlide:', leftSlide);
             if (this.slideLeft.classList.contains(this.transparentClass)) this.slideLeft.classList.remove(this.transparentClass)
             this.slideLeft = this.slideLeft.previousElementSibling || this.slideLeft
         }
 
         if (this._isBehindRight(this.pointRight, this.slideRight)) {
-            // console.log('initBriefList, swiper setTranslate cb, rightSlide is behind, rightSlide:', rightSlide);
             if (!this.slideRight.classList.contains(this.transparentClass)) this.slideRight.classList.add(this.transparentClass)
             if (this.slideRight.previousElementSibling && this._isBehindRight(this.pointRight, this.slideRight.previousElementSibling)) this.slideRight = this.slideRight.previousElementSibling
         } else {
-            // console.log('initBriefList, swiper setTranslate cb, slideRight isnt behind, slideRight:', slideRight);
             if (this.slideRight.classList.contains(this.transparentClass)) this.slideRight.classList.remove(this.transparentClass)
             this.slideRight = this.slideRight.nextElementSibling || this.slideRight
         }
