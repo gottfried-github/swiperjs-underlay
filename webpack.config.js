@@ -18,6 +18,13 @@ export default {
   devtool: 'inline-source-map',
   module: {
     rules: [
+        {
+          test: /\.(html|css)$/i,
+          type: 'asset/resource',
+          generator: {
+              filename: '[name][ext]'
+          }
+        },
         /*
         {
           test: /\.(png|jpe?g|gif)$/i,

@@ -39,10 +39,6 @@ html, body {
     transition: opacity 0.3s;
 }
 
-.transparent {
-    opacity: 0;
-}
-
 .button-prev-container, .button-next-container {
     display: flex;
     align-items: center;
@@ -75,4 +71,22 @@ html, body {
     border-radius: 50%;
 
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+.transparent {
+    opacity: 0.2;
+}
+
+@media (max-width: 850px) {
+    .swiper-container {
+        padding: 0px 16px;
+    }
+
+    .button-prev-container, .button-next-container {
+        width: 60px;
+    }
+
+    .transparent {
+        opacity: 1;
+    }
 }
