@@ -1,3 +1,5 @@
+import "./index.html"
+import "./index.css"
 import {Swiper, Pagination, Navigation, FreeMode} from 'swiper'
 
 class Main {
